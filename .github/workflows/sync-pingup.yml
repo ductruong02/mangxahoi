@@ -3,6 +3,8 @@ name: Auto Sync to My PingUp
 
 on:
   push:
+    branches:
+      - loi
   workflow_dispatch:
 
 permissions:
@@ -10,6 +12,7 @@ permissions:
 
 jobs:
   sync:
+    if: github.repository == 'ductruong02/mangxahoi'
     runs-on: ubuntu-latest
 
     steps:
@@ -19,16 +22,16 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Push to destination repository
+      - name: Push loi to destination loi
         env:
           TOKEN: ${{ secrets.PINGUP_SYNC_TOKEN }}
-          BRANCH: ${{ github.ref_name }}
         run: |
           if [ -z "$TOKEN" ]; then
-            echo "ERROR: PINGUP_SYNC_TOKEN is missing or unavailable."
+            echo "ERROR: PINGUP_SYNC_TOKEN is missing."
             exit 1
           fi
 
           git push \
             "https://x-access-token:${TOKEN}@github.com/LoiLeVan2/pingup.git" \
-            "HEAD:refs/heads/${BRANCH}"
+            HEAD:refs/heads/loi \
+            --force
