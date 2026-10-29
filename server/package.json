@@ -20,7 +20,8 @@
     "imagekit": "^6.0.0",
     "inngest": "^4.25.0",
     "mongoose": "^9.11.1",
-    "multer": "^2.4.0"
+    "multer": "^2.4.0",
+    "nodemailer": "^10.3.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
