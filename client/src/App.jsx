@@ -1,7 +1,9 @@
 import { useAuth, useUser } from "@clerk/clerk-react"
 import { useEffect } from "react"
 import { Toaster } from "react-hot-toast"
+import { useDispatch } from "react-redux"
 import { Route, Routes } from "react-router-dom"
+import { fetchUser } from "./features/user/userSlice"
 import ChatBox from "./pages/ChatBox"
 import Connections from "./pages/Connections"
 import CreatePost from "./pages/CreatePost"
@@ -16,11 +18,17 @@ const App = () => {
   const { user } = useUser()
   const { getToken } = useAuth()
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    if (user) {
-      getToken().then((token) => console.log(token))
+    const fetchData = async () => {
+      if (user) {
+        const token = await getToken()
+        dispatch(fetchUser(token))
+      }
     }
-  }, [user])
+    fetchData()
+  }, [user, getToken, dispatch])
 
   return (
     <>
