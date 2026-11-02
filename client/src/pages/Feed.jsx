@@ -1,3 +1,4 @@
+
 import { useAuth } from "@clerk/clerk-react"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
@@ -17,7 +18,7 @@ const Feed = () => {
     const fetchFeeds = async () => {
         try {
             setLoading(true)
-            const { data } = await api.get('/api/post/feed', {
+            const { data } = await api.get(`/api/post/feed`, {
                 headers: { Authorization: `Bearer ${await getToken()}` }
             })
             if (data.success) {
