@@ -180,8 +180,8 @@ export const sendConnectionRequest = async (req, res) => {
         // Check if users are already connected
         const connection = await Connection.findOne({
             $or: [
-                { rom_user_id: userId, to_user_id: id },
-                { rom_user_id: id, to_user_id: userId },
+                { from_user_id: userId, to_user_id: id },
+                { from_user_id: id, to_user_id: userId },
             ]
         })
 
@@ -213,7 +213,7 @@ export const sendConnectionRequest = async (req, res) => {
 export const getUserConnections = async (req, res) => {
     try {
         const { userId } = req.auth()
-        const user = await User.findById(userId).populate('connection followers following')
+        const user = await User.findById(userId).populate('connections followers following')
 
         const connections = user.connections
         const followers = user.followers

@@ -1,13 +1,13 @@
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
+import { useSelector } from "react-redux"
 import { Outlet } from "react-router-dom"
-import { dummyUserData } from "../assets/assets"
 import Loading from "../components/Loading"
 import Sidebar from "../components/Sidebar"
 
 const Layout = () => {
 
-    const user = dummyUserData
+    const user = useSelector((state) => state.user.value)
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     return user ? (
