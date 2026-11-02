@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios";
+
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import api from "../../api/axios"
 
 const initialState = {
     connections: [],
@@ -8,11 +9,13 @@ const initialState = {
     following: [],
 }
 
-export const fetchConnections = createAsyncThunk('connections/fetchConnections',
+export const fetchConnections = createAsyncThunk(
+    'connections/fetchConnections',
     async (token) => {
         const { data } = await api.get('/api/user/connections', {
             headers: { Authorization: `Bearer ${token}` }
         })
+
         return data.success ? data : null
     }
 )
