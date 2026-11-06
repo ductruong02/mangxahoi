@@ -1,3 +1,4 @@
+
 import { useAuth, useUser } from "@clerk/clerk-react"
 import { useEffect, useRef } from "react"
 import toast, { Toaster } from "react-hot-toast"
@@ -64,8 +65,9 @@ const App = () => {
   return (
     <>
       <Toaster />
+
       <Routes>
-        <Route path="/" element={!user ? <Login /> : <Layout />} >
+        <Route path="/" element={!user ? <Login /> : <Layout />}>
           <Route index element={<Feed />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/messages/:userId" element={<ChatBox />} />
@@ -75,7 +77,7 @@ const App = () => {
           <Route path="/profile/:profileId" element={<Profile />} />
           <Route path="/create-post" element={<CreatePost />} />
         </Route>
-      </Routes >
+      </Routes>
     </>
   )
 }
