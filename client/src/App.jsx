@@ -14,9 +14,9 @@ import CreatePost from "./pages/CreatePost"
 import Discover from "./pages/Discover"
 import Feed from "./pages/Feed"
 import Layout from "./pages/Layout"
+import Login from "./pages/Login"
 import Messages from "./pages/Messages"
 import Profile from "./pages/Profile"
-import Login from "./pages/login"
 
 const App = () => {
   const { user } = useUser()
