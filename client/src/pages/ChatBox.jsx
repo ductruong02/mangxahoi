@@ -3,7 +3,7 @@ import { ImageIcon, SendHorizonal } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import api from "../api/axios"
 import { addMessage, fetchMessages, resetMessages } from "../features/messages/messagesSlice"
 
@@ -13,6 +13,7 @@ const ChatBox = () => {
     const { userId } = useParams()
     const { getToken } = useAuth()
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [text, setText] = useState('')
     const [image, setImage] = useState(null)
@@ -93,6 +94,13 @@ const ChatBox = () => {
                                         message.message_type === 'image' &&
                                         <img src={message.media_url} className="w-full max-w-sm rounded-lg mb-1" alt="" />
                                     }
+                                    {message.message_type === 'post' && message.shared_post && (
+                                        <button onClick={() => navigate(`/profile/${message.shared_post.user?._id}`)} className="text-left border rounded-lg overflow-hidden mb-1 bg-white">
+                                            {message.shared_post.image_urls?.[0] && <img src={message.shared_post.image_urls[0]} className="w-full max-w-sm max-h-48 object-cover" alt="" />}
+                                            <span className="block px-3 py-2 text-xs text-indigo-700 font-medium">Post by {message.shared_post.user?.full_name || 'user'}</span>
+                                            <span className="block px-3 pb-2 text-xs text-gray-600 line-clamp-2">{message.shared_post.content}</span>
+                                        </button>
+                                    )}
                                     <p>{message.text}</p>
                                 </div>
                             </div>

@@ -41,7 +41,7 @@ const Feed = () => {
             <div>
                 <StoriesBar />
                 <div className="p-4 space-y-6">
-                    {feeds.map((post) => (<PostCard key={post._id} post={post} />))}
+                    {feeds.map((post) => (<PostCard key={post._id} post={post} onPostChanged={(postId, refresh) => refresh || !postId ? fetchFeeds() : setfeeds(items => items.filter(item => item._id !== postId))} />))}
                 </div>
             </div>
             {/* Right Sidebar */}

@@ -71,7 +71,7 @@ const Profile = () => {
                     {/* Posts */}
                     {activeTab === 'posts' && (
                         <div className="mt-6 flex flex-col items-center gap-6">
-                            {posts.map((post) => <PostCard key={post._id} post={post} />)}
+                            {posts.map((post) => <PostCard key={post._id} post={post} onPostChanged={(postId, refresh) => refresh || !postId ? fetchUser(profileId || currentUser._id) : setPosts(items => items.filter(item => item._id !== postId))} />)}
                         </div>
                     )}
                     {/* Media */}
