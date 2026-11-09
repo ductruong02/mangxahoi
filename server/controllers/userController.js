@@ -268,9 +268,10 @@ export const getUserProfiles = async (req, res) => {
         if (!profile) {
             return res.json({ success: false, message: "Profile not found" })
         }
-        const posts = await Post.find({ user: profileId }).populate('user')
+        const posts = await Post.find({ user: profileId }).populate('user').populate({ path: 'shared_post', populate: { path: 'user' } }).sort({ createdAt: -1 })
+        const visiblePosts = posts.filter(post => post.post_type !== 'share' || post.shared_post)
 
-        res.json({ success: true, profile, posts })
+        res.json({ success: true, profile, posts: visiblePosts })
 
     } catch (error) {
         console.log(error)
