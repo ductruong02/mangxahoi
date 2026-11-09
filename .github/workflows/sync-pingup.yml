@@ -19,25 +19,48 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
         with:
+          ref: loi
           fetch-depth: 1
           persist-credentials: false
 
       - name: Create clean snapshot
         run: |
-          # Create a new branch without old commit history
+          # Create a temporary directory for clean snapshot
+          mkdir -p "$RUNNER_TEMP/pingup-clean"
+
+          # Copy source files, excluding Git metadata and environment files
+          rsync -a \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='**/.env' \
+            --exclude='**/.env.*' \
+            --exclude='**/node_modules' \
+            ./ "$RUNNER_TEMP/pingup-clean/"
+
+          # Create a new orphan branch
           git switch --orphan sync-snapshot
 
-          # Add current project files
-          git add -A
+          # Remove tracked files from the index
+          git rm -r --cached . 2>/dev/null || true
 
-          # Remove all environment files from the snapshot
-          git ls-files -z | grep -zE '(^|/)\.env($|\.)' | xargs -0 -r git rm --cached --ignore-unmatch
+          # Copy clean snapshot into workspace
+          rsync -a --delete \
+            --exclude='.git' \
+            "$RUNNER_TEMP/pingup-clean/" ./
+
+          # Stage all clean files
+          git add -f .
 
           # Configure Git identity
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Create a clean snapshot commit
+          # Check staged files
+          git status --short
+
+          # Create snapshot commit
           git commit -m "Sync latest PingUp source without environment files"
 
       - name: Push snapshot to destination
