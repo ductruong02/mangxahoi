@@ -19,10 +19,28 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: false
 
-      - name: Push loi to destination loi
+      - name: Create clean snapshot
+        run: |
+          # Create a new branch without old commit history
+          git switch --orphan sync-snapshot
+
+          # Add current project files
+          git add -A
+
+          # Remove all environment files from the snapshot
+          git ls-files -z | grep -zE '(^|/)\.env($|\.)' | xargs -0 -r git rm --cached --ignore-unmatch
+
+          # Configure Git identity
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Create a clean snapshot commit
+          git commit -m "Sync latest PingUp source without environment files"
+
+      - name: Push snapshot to destination
         env:
           TOKEN: ${{ secrets.PINGUP_SYNC_TOKEN }}
         run: |
