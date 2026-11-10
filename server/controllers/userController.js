@@ -77,7 +77,7 @@ export const updateUserData = async (req, res) => {
             updatedData.cover_photo = url
         }
 
-        const user = await User.findByIdAndUpdate(userId, updatedData, { new: true })
+        const user = await User.findByIdAndUpdate(userId, updatedData, { returnDocument: 'after' })
 
         res.json({ success: true, user, message: "Profile updated successfully" })
 
